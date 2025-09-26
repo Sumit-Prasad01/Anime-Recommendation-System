@@ -139,6 +139,10 @@ cython_debug/
 .vscode/
 
 
-artifacts/
+artifacts/raw/
+artifacts/processed/
+artifacts/model/
+artifacts/weights/
+artifacts/model_checkpoint
 
-mlruns/
+# .dvc/
