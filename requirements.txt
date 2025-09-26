@@ -9,3 +9,4 @@ tensorflow
 seaborn
 scikit-learn
 wordcloud
+comet-ml

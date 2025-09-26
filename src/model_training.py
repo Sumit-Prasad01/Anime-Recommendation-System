@@ -1,4 +1,5 @@
 import joblib 
+import comet_ml
 import numpy as np
 import os 
 import tensorflow as tf
@@ -11,6 +12,9 @@ from src.logger import get_logger
 from src.custom_exception import CustomException
 from src.base_model import BaseModel
 from config.paths_config import *
+from dotenv import load_dotenv
+load_dotenv()
+
 
 logger = get_logger(__name__)
 
@@ -18,7 +22,13 @@ class ModelTraining:
     def __init__(self, data_path):
         self.data_path = data_path
 
-        logger.info("Model Training initialized")
+        self.experiment = comet_ml.Experiment(
+            api_key = os.getenv('COMET_ML_API_KEY'),
+            project_name = os.getenv('PROJECT_NAME'),
+            workspace = os.getenv('WORKSPACE')
+            )
+
+        logger.info("Model Training & Comet-Ml initialized")
 
     
 
@@ -88,6 +98,13 @@ class ModelTraining:
                 model.load_weights(CHECKPOINT_FILEPATH)
                 logger.info("Model training Completed")
 
+                for epoch in range(len(history.history['loss'])):
+                    train_loss = history.history['loss'][epoch]
+                    val_loss = history.history['val_loss'][epoch]
+
+                    self.experiment.log_metric('tarin_loss', train_loss, step = epoch)
+                    self.experiment.log_metric('val_loss', val_loss, step = epoch)
+
             except Exception as e:
                 raise CustomException('Model training failed',e)
             
@@ -119,6 +136,10 @@ class ModelTraining:
 
             joblib.dump(user_weights, USER_WEIGHTS_PATH)
             joblib.dump(anime_weights, ANIME_WEIGHTS_PATH)
+
+            self.experiment.log_asset(MODEL_PATH)
+            self.experiment.log_asset(ANIME_WEIGHTS_PATH)
+            self.experiment.log_asset(USER_WEIGHTS_PATH)
 
             logger.info("User and  anime weights saved successfully.")
         
