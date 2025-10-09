@@ -41,7 +41,7 @@ pipeline{
                         echo 'DVC Pull'
 
                         sh'''
-                        . ${VENV_DIR}/bib/activate
+                        . ${VENV_DIR}/bin/activate
                         dvc pull
                         '''
                     }
