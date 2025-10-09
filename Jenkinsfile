@@ -58,7 +58,7 @@ pipeline{
                     script {
                         echo 'Build and Push Image to GCR'
                         sh '''
-                        export PATH = $PATH:${GCLOUD_PATH}
+                        export PATH=$PATH:${GCLOUD_PATH}
                         gcloud auth activate service-account --key-file=${GOOGLE_APPLICATION_CREDENTIALS}
                         gcloud config set project ${GCP_PROJECT}
                         gcloud auth configure-docker --quiet
@@ -76,7 +76,7 @@ pipeline{
                     script {
                         echo 'Deploying to Kubernetes'
                         sh '''
-                        export PATH = $PATH:${GCLOUD_PATH}:${KUBECTL_AUTH_PLUGIN}
+                        export PATH=$PATH:${GCLOUD_PATH}:${KUBECTL_AUTH_PLUGIN}
                         gcloud auth activate service-account --key-file=${GOOGLE_APPLICATION_CREDENTIALS}
                         gcloud config set project ${GCP_PROJECT}
                         gcloud container clusters get-credentials anime-rec-cluster --region us-central1
