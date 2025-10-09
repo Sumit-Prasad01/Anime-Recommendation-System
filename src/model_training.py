@@ -23,9 +23,9 @@ class ModelTraining:
         self.data_path = data_path
 
         self.experiment = comet_ml.Experiment(
-            api_key = 'mRLDHzmi4zGkgIAzMslX3T1WM',
-            project_name = 'anime-recommendation',
-            workspace = 'sumit-prasad01'
+            api_key = os.getenv('COMET_ML_API_KEY'),
+            project_name = os.getenv('PROJECT_NAME'),
+            workspace = os.getenv('WORKSPACE')
             )
 
         logger.info("Model Training & Comet-Ml initialized")
